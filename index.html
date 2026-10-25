@@ -22,13 +22,24 @@
 
     <script>
         async function checkSiteStatus() {
+            // Recommendation: Point this to a lightweight endpoint or your main URL 
+            // ensuring your server sends 'Access-Control-Allow-Origin: *' headers.
             const targetUrl = 'https://www.sscspa.co.uk';
             const statusBadge = document.getElementById('status-text');
 
             try {
-                // Pings the main site using no-cors to check if the server is reachable
-                await fetch(targetUrl, { mode: 'no-cors', cache: 'no-store' });
+                // Using standard CORS mode to read the actual HTTP status code
+                const response = await fetch(targetUrl, { 
+                    method: 'GET',
+                    cache: 'no-store' 
+                });
                 
+                // Check if the response status is a 502, 1033, or any other server error
+                if (response.status === 502 || response.status === 1033 || !response.ok) {
+                    throw new Error('Server is still experiencing errors');
+                }
+
+                // If we get here, the site is truly healthy and online!
                 statusBadge.textContent = 'Status: Back online! Redirecting...';
                 statusBadge.style.backgroundColor = 'rgba(34, 197, 94, 0.15)';
                 statusBadge.style.color = '#4ade80';
@@ -39,6 +50,7 @@
                 }, 1500);
 
             } catch (error) {
+                // Catches network failures, 502s, 1033s, or thrown errors
                 statusBadge.textContent = 'Status: Maintenance (Retrying...)';
             }
         }
