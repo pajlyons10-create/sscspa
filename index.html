@@ -26,6 +26,7 @@
             const statusBadge = document.getElementById('status-text');
 
             try {
+                // Pings the main site using no-cors to check if the server is reachable
                 await fetch(targetUrl, { mode: 'no-cors', cache: 'no-store' });
                 
                 statusBadge.textContent = 'Status: Back online! Redirecting...';
@@ -35,13 +36,15 @@
 
                 setTimeout(() => {
                     window.location.href = targetUrl;
-            } catch (error)
+                }, 1500);
+
+            } catch (error) {
                 statusBadge.textContent = 'Status: Maintenance (Retrying...)';
             }
         }
 
+        // Check immediately, then check every 10 seconds
         checkSiteStatus();
-
         setInterval(checkSiteStatus, 10000);
     </script>
 </body>
