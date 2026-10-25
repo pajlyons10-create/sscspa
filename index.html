@@ -16,19 +16,35 @@
                 The SSCSPA website is currently down. This could be due to daily scheduled downtime, 
                 routine maintenance, or an unexpected server error. Thank you for your patience!
             </p>
-            <div class="status-badge" id="status-text">Status: Checking connection...</div>
+
+            <!-- Scheduled Maintenance List -->
+            <div class="schedule-section">
+                <h3>Scheduled Downtime Hours</h3>
+                <ul class="schedule-list">
+                    <li><span>Sat 24 Oct:</span> 10:00 - 00:00</li>
+                    <li><span>Sun 25 Oct:</span> 10:00 - 00:00</li>
+                    <li><span>Mon 26 Oct:</span> 10:00 - 00:00</li>
+                    <li><span>Tue 27 Oct:</span> 10:00 - 00:00</li>
+                    <li><span>Wed 28 Oct:</span> 10:00 - 00:00</li>
+                    <li><span>Thu 29 Oct:</span> 10:00 - 00:00</li>
+                    <li><span>Fri 30 Oct:</span> 10:00 - 00:00</li>
+                    <li><span>Sat 31 Oct:</span> 10:00 - 00:00</li>
+                    <li><span>Sun 1 Nov:</span> 10:00 - 23:00</li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <div class="status-badge" id="status-text">Status: Maintenance (Retrying...)</div>
+            </div>
         </div>
     </div>
 
     <script>
         function checkSiteStatus() {
             const statusBadge = document.getElementById('status-text');
-            // Add a cache-buster timestamp so the browser doesn't load a cached version
             const targetUrl = 'https://www.sscspa.co.uk/favicon.ico?_=' + Date.now();
-            
             const img = new Image();
 
-            // Triggered if the main site responds successfully with a 200 OK
             img.onload = function() {
                 statusBadge.textContent = 'Status: Back online! Redirecting...';
                 statusBadge.style.backgroundColor = 'rgba(34, 197, 94, 0.15)';
@@ -40,7 +56,6 @@
                 }, 1500);
             };
 
-            // Triggered if the site is still down (502, 1033, or offline)
             img.onerror = function() {
                 statusBadge.textContent = 'Status: Maintenance (Retrying...)';
             };
@@ -48,7 +63,6 @@
             img.src = targetUrl;
         }
 
-        // Check immediately when the page loads, then check every 10 seconds
         checkSiteStatus();
         setInterval(checkSiteStatus, 10000);
     </script>
